@@ -185,8 +185,11 @@ public final class SparkDpp implements java.io.Serializable {
                                                              SparkRDDAggregator[] sparkRDDAggregators) throws SparkDppException {
         // TODO(wb) should deal largint as BigInteger instead of string when using biginteger as key,
         // data type may affect sorting logic
-        StructType dstSchema = DppUtils.createDstTableSchema(indexMeta.columns, false, true);
-        ExpressionEncoder encoder = RowEncoder.apply(dstSchema);
+        boolean autoTransform = false;
+        if (Boolean.getBoolean(spark.conf().get("spark.doris.DateType.autoTransform", "false"))) {
+            autoTransform = true;
+        }
+        StructType dstSchema = DppUtils.createDstTableSchema(indexMeta.columns, false, true, autoTransform);        ExpressionEncoder encoder = RowEncoder.apply(dstSchema);
 
         resultRDD.repartitionAndSortWithinPartitions(new BucketPartitioner(bucketKeyMap), new BucketComparator())
         .foreachPartition(new VoidFunction<Iterator<Tuple2<List<Object>,Object[]>>>() {

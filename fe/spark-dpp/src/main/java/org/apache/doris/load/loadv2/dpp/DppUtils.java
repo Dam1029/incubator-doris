@@ -198,7 +198,7 @@ public class DppUtils {
         return hashValue.getValue();
     }
 
-    public static StructType createDstTableSchema(List<EtlJobConfig.EtlColumn> columns, boolean addBucketIdColumn, boolean regardDistinctColumnAsBinary) {
+    public static StructType createDstTableSchema(List<EtlJobConfig.EtlColumn> columns, boolean addBucketIdColumn, boolean regardDistinctColumnAsBinary, boolean autoTransform) {
         List<StructField> fields = new ArrayList<>();
         if (addBucketIdColumn) {
             StructField bucketIdField = DataTypes.createStructField(BUCKET_ID, DataTypes.StringType, true);
@@ -206,6 +206,9 @@ public class DppUtils {
         }
         for (EtlJobConfig.EtlColumn column : columns) {
             DataType structColumnType = getDataTypeFromColumn(column, regardDistinctColumnAsBinary);
+            if (structColumnType == DataTypes.DateType && autoTransform) {
+                structColumnType = DataTypes.StringType;
+            }
             StructField field = DataTypes.createStructField(column.columnName, structColumnType, column.isAllowNull);
             fields.add(field);
         }
