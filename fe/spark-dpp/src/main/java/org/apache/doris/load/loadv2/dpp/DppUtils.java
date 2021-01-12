@@ -206,7 +206,7 @@ public class DppUtils {
         }
         for (EtlJobConfig.EtlColumn column : columns) {
             DataType structColumnType = getDataTypeFromColumn(column, regardDistinctColumnAsBinary);
-            if (structColumnType == DataTypes.DateType && autoTransform) {
+            if (autoTransform && structColumnType == DataTypes.DateType) {
                 structColumnType = DataTypes.StringType;
             }
             StructField field = DataTypes.createStructField(column.columnName, structColumnType, column.isAllowNull);

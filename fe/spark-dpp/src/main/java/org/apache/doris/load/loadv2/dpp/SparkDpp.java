@@ -546,6 +546,7 @@ public final class SparkDpp implements java.io.Serializable {
                 }
             }
             if (column.columnType.equalsIgnoreCase("DATE")) {
+                LOG.info("column name:" + column.columnName + ", column type:" + column.columnType);
                 dataframe = dataframe.withColumn(dstField.name(), dataframe.col(dstField.name()).cast("date"));
             } else if (column.columnType.equalsIgnoreCase("BOOLEAN")) {
                 dataframe = dataframe.withColumn(dstField.name(),
@@ -972,7 +973,7 @@ public final class SparkDpp implements java.io.Serializable {
                     }
                 }
                 List<DorisRangePartitioner.PartitionRangeKey> partitionRangeKeys = createPartitionRangeKeys(partitionInfo, partitionKeySchema);
-                StructType dstTableSchema = DppUtils.createDstTableSchema(baseIndex.columns, false, false);
+                StructType dstTableSchema = DppUtils.createDstTableSchema(baseIndex.columns, false, false, false);
                 RollupTreeBuilder rollupTreeParser = new MinimumCoverageRollupTreeBuilder();
                 RollupTreeNode rootNode = rollupTreeParser.build(etlTable);
                 LOG.info("Start to process rollup tree:" + rootNode);

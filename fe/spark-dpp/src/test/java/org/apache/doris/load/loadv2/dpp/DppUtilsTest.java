@@ -209,12 +209,12 @@ public class DppUtilsTest {
         columns.add(column2);
 
         try {
-            StructType schema = dppUtils.createDstTableSchema(columns, false, false);
+            StructType schema = dppUtils.createDstTableSchema(columns, false, false, false);
             Assert.assertEquals(2, schema.fieldNames().length);
             Assert.assertEquals("column1", schema.fieldNames()[0]);
             Assert.assertEquals("column2", schema.fieldNames()[1]);
 
-            StructType schema2 = dppUtils.createDstTableSchema(columns, true, false);
+            StructType schema2 = dppUtils.createDstTableSchema(columns, true, false, false);
             Assert.assertEquals(3, schema2.fieldNames().length);
             Assert.assertEquals("__bucketId__", schema2.fieldNames()[0]);
             Assert.assertEquals("column1", schema2.fieldNames()[1]);
