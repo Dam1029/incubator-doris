@@ -189,11 +189,12 @@ public final class SparkDpp implements java.io.Serializable {
         if (Boolean.getBoolean(spark.conf().get("spark.doris.DateType.autoTransform", "false"))) {
             autoTransform = true;
         }
-        StructType dstSchema0 = DppUtils.createDstTableSchema(indexMeta.columns, false, true, autoTransform);        ExpressionEncoder encoder = RowEncoder.apply(dstSchema);
+        StructType dstSchema0 = DppUtils.createDstTableSchema(indexMeta.columns, false, true, autoTransform);
         dstSchema0.printTreeString();
 
-        StructType dstSchema = DppUtils.createDstTableSchema(indexMeta.columns, false, true, true);        ExpressionEncoder encoder = RowEncoder.apply(dstSchema);
+        StructType dstSchema = DppUtils.createDstTableSchema(indexMeta.columns, false, true, true);
         dstSchema.printTreeString();
+        ExpressionEncoder encoder = RowEncoder.apply(dstSchema);
 
         resultRDD.repartitionAndSortWithinPartitions(new BucketPartitioner(bucketKeyMap), new BucketComparator())
         .foreachPartition(new VoidFunction<Iterator<Tuple2<List<Object>,Object[]>>>() {
